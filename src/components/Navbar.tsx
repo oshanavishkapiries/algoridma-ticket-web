@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Ticket, LayoutDashboard, User, Menu, X } from "lucide-react";
+import { Ticket, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
@@ -13,9 +13,7 @@ export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   const navLinks = [
-    { name: "Events", href: "/", icon: Ticket },
-    { name: "Organizer", href: "/organizer/dashboard", icon: LayoutDashboard },
-    { name: "My Profile", href: "/profile", icon: User },
+    { name: "My Tickets", href: "/profile", icon: Ticket },
   ];
 
   return (
