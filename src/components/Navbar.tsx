@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { Ticket, Menu, X, Wallet } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 export function Navbar() {
   const pathname = usePathname();
@@ -19,9 +20,14 @@ export function Navbar() {
     <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2 group">
-          <span className="font-headline text-2xl font-bold tracking-tight text-primary">
-            algoරිද්ම
-          </span>
+          <Image
+            src="https://www.ijse.lk/images/logos/ijse@1x.png"
+            alt="IJSE Logo"
+            width={100}
+            height={32}
+            className="h-8 w-auto object-contain"
+            priority
+          />
         </Link>
 
         {/* Desktop Nav */}
