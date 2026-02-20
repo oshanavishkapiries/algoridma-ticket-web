@@ -28,7 +28,7 @@ export default function RootLayout({
         <main className="flex-1">
           {children}
         </main>
-        <footer className="border-t py-8 mt-12 bg-secondary/20">
+        <footer className="border-t py-3 bg-secondary/20">
           <div className="container mx-auto px-4 text-center">
             <p className="text-xs text-muted-foreground mt-2">© {new Date().getFullYear()} IJSE Student Committee. All rights reserved.</p>
           </div>
