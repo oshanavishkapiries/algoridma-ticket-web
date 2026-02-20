@@ -243,8 +243,9 @@ export default function BuyTicketPage() {
 
               <Button 
                 type="submit" 
+                variant="outline"
                 disabled={isSubmitting} 
-                className="w-full h-14 bg-white hover:bg-zinc-200 font-headline text-xl shadow-lg text-black font-black"
+                className="w-full h-14 font-headline text-xl"
               >
                 {isSubmitting ? (
                   <>
