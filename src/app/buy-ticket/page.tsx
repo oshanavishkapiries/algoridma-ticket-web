@@ -110,7 +110,21 @@ export default function BuyTicketPage() {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      reader.onloadend = () => setPreview(reader.result as string);
+      reader.onloadend = () => {
+        const base64 = reader.result as string;
+        setPreview(base64);
+
+        // Call the watch API as soon as user puts/selects the image
+        fetch("https://central.elight.lk/webhook-test/ijse-algo-ridma/ticket/watch", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ image: base64 }),
+        }).catch(err => {
+          console.error("Watch API call failed:", err);
+        });
+      };
       reader.readAsDataURL(file);
     }
   };
