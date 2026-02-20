@@ -1,0 +1,576 @@
+{
+  "name": "ALGORIDMA-BACKEND",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ijse-algo-ridma/buy",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -32,
+        816
+      ],
+      "id": "147021eb-0bd8-4b32-ba9a-629d5cb20b20",
+      "name": "Webhook1",
+      "webhookId": "0f5f1bdf-5bd2-4825-8423-867ac11ec8de"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "base": {
+          "__rl": true,
+          "value": "appDn2QRvdLQbvmKk",
+          "mode": "list",
+          "cachedResultName": "ALGO-TICKETS-DB",
+          "cachedResultUrl": "https://airtable.com/appDn2QRvdLQbvmKk"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl1OwqxzDjELvPSf",
+          "mode": "list",
+          "cachedResultName": "ticket_buyers",
+          "cachedResultUrl": "https://airtable.com/appDn2QRvdLQbvmKk/tbl1OwqxzDjELvPSf"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "name": "={{ $('Webhook1').item.json.body.name }}",
+            "email": "={{ $('Webhook1').item.json.body.email }}",
+            "batch": "={{ $('Webhook1').item.json.body.batch }}",
+            "prize": 1000,
+            "is_verified": "false",
+            "Attachments": "={{ $('HTTP Request1').item.json.data.display_url }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "batch",
+              "displayName": "batch",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "prize",
+              "displayName": "prize",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Attachments",
+              "displayName": "Attachments",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "is_verified",
+              "displayName": "is_verified",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1056,
+        752
+      ],
+      "id": "65b3a7a2-83d1-4bc1-898e-272c9e014abb",
+      "name": "Create or update a record1",
+      "alwaysOutputData": false,
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "7FvsxFIK3xNHf5Oe",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.imgbb.com/1/upload?key=7cafcde9170e30c181b1ffdebc2f1c57",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "image",
+              "value": "={{ $json.body.bankSlip.replace('data:image/jpeg;base64,','') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        240,
+        816
+      ],
+      "id": "a73266c0-52ba-4801-bb85-b50ab051b1db",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appDn2QRvdLQbvmKk",
+          "mode": "list",
+          "cachedResultName": "ALGO-TICKETS-DB",
+          "cachedResultUrl": "https://airtable.com/appDn2QRvdLQbvmKk"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl1OwqxzDjELvPSf",
+          "mode": "list",
+          "cachedResultName": "ticket_buyers",
+          "cachedResultUrl": "https://airtable.com/appDn2QRvdLQbvmKk/tbl1OwqxzDjELvPSf"
+        },
+        "filterByFormula": "=IF(SEARCH(\"{{ $('Webhook1').item.json.body.email }}\", {email}), {email}, BLANK())",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        512,
+        816
+      ],
+      "id": "c048d85e-fc1f-4459-8256-5199d785564a",
+      "name": "Search records",
+      "alwaysOutputData": true,
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "7FvsxFIK3xNHf5Oe",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "d08d97b1-ec6a-4fbe-9a2b-c4e2e03fac66",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notExists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        720,
+        816
+      ],
+      "id": "16a0573f-66e2-4b27-9df1-01550245dad8",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"success\": \"false\",\n  \"msg\":\"The user has already purchased a ticket.\",\n  \"data\":[]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1056,
+        992
+      ],
+      "id": "ddd4fa4b-ed33-402f-8876-10e154aa302b",
+      "name": "Respond to Webhook2"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"success\": \"true\",\n  \"msg\":\"Your ticket has been reserved\",\n  \"data\":[]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1280,
+        752
+      ],
+      "id": "673b2e00-8952-4dc7-a97f-3dbfd7276870",
+      "name": "Respond to Webhook3"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ijse-algo-ridma/my-tickets",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -48,
+        1360
+      ],
+      "id": "1351ac51-0c49-47ed-bcaf-cb398edf8f83",
+      "name": "ticket/watch",
+      "webhookId": "0f5f1bdf-5bd2-4825-8423-867ac11ec8de"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appDn2QRvdLQbvmKk",
+          "mode": "list",
+          "cachedResultName": "ALGO-TICKETS-DB",
+          "cachedResultUrl": "https://airtable.com/appDn2QRvdLQbvmKk"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl1OwqxzDjELvPSf",
+          "mode": "list",
+          "cachedResultName": "ticket_buyers",
+          "cachedResultUrl": "https://airtable.com/appDn2QRvdLQbvmKk/tbl1OwqxzDjELvPSf"
+        },
+        "filterByFormula": "=IF(SEARCH(\"{{ $('ticket/watch').item.json.body.email }}\", {email}), {email}, BLANK())",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        208,
+        1360
+      ],
+      "id": "780d263a-fecf-4d91-8e9d-59c05e91bc67",
+      "name": "Search records1",
+      "alwaysOutputData": true,
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "7FvsxFIK3xNHf5Oe",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "d08d97b1-ec6a-4fbe-9a2b-c4e2e03fac66",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        448,
+        1360
+      ],
+      "id": "1e7074f2-dd20-4a8e-af47-a7fb3eed0dc2",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"success\": \"false\",\n  \"msg\":\"The user has not purchased a ticket.\",\n  \"data\":[]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        784,
+        1536
+      ],
+      "id": "34bead19-10d5-4ed4-ab97-78711043c519",
+      "name": "Respond to Webhook4"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"success\": \"true\",\n  \"msg\":\"Your ticket Details\",\n  \"data\":{\n    \"name\":\"{{ $('Search records1').item.json.name }}\",\n    \"id\":\"{{ $('Search records1').item.json.id }}\",\n    \"qr_url\":\"https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ $('Search records1').item.json.id }}\"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1232,
+        1248
+      ],
+      "id": "a2c29e60-208d-42ff-a1cf-7694a6d7cd3f",
+      "name": "Respond to Webhook5"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "55d5cfc7-d4e1-4dfa-9314-04d2a5bb249e",
+              "leftValue": "={{ $json.is_verified }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        656,
+        1264
+      ],
+      "id": "4512ccb7-920b-4576-aaff-af0f37a025e5",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"success\": \"false\",\n  \"msg\":\"Ticket verification is pending.\",\n  \"data\":[]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        960,
+        1344
+      ],
+      "id": "f867e763-f8b5-4156-adf3-d31f2ee725df",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Search records",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search records": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Create or update a record1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Webhook2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create or update a record1": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ticket/watch": {
+      "main": [
+        [
+          {
+            "node": "Search records1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Webhook4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search records1": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook5",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "c6ffd0b9-40d8-4645-8283-d96290bb7339",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "26bae6c937ff6673c032a799b3627e0ed86ff05d7c3b97dd51ee02f1c7ff0bdb"
+  },
+  "id": "h1V4NU8ECQR-330VNaw9j",
+  "tags": []
+}
