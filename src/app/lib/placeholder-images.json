@@ -1,0 +1,41 @@
+
+{
+  "placeholderImages": [
+    {
+      "id": "algo-rhythm-concert",
+      "description": "Electronic music concert with red lighting",
+      "imageUrl": "https://picsum.photos/seed/algo1/1200/600",
+      "imageHint": "concert music"
+    },
+    {
+      "id": "tech-summit",
+      "description": "Technology conference stage",
+      "imageUrl": "https://picsum.photos/seed/algo2/800/600",
+      "imageHint": "tech conference"
+    },
+    {
+      "id": "hackathon",
+      "description": "Students working on laptops at a hackathon",
+      "imageUrl": "https://picsum.photos/seed/algo3/800/600",
+      "imageHint": "hackathon coding"
+    },
+    {
+      "id": "sports-meet",
+      "description": "University track and field event",
+      "imageUrl": "https://picsum.photos/seed/algo4/800/600",
+      "imageHint": "sports stadium"
+    },
+    {
+      "id": "art-exhibit",
+      "description": "Fine arts gallery exhibition",
+      "imageUrl": "https://picsum.photos/seed/algo5/800/600",
+      "imageHint": "art gallery"
+    },
+    {
+      "id": "networking-night",
+      "description": "Students networking with professionals",
+      "imageUrl": "https://picsum.photos/seed/algo6/800/600",
+      "imageHint": "networking business"
+    }
+  ]
+}
