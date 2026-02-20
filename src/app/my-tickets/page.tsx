@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,6 +20,7 @@ const formSchema = z.object({
 
 export default function MyTicketsPage() {
   const { toast } = useToast();
+  const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -31,7 +33,6 @@ export default function MyTicketsPage() {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsSubmitting(true);
     try {
-      // Call the primary retrieval API
       const response = await fetch("https://central.elight.lk/webhook-test/ijse-algo-ridma/my-tickets", {
         method: "POST",
         headers: {
@@ -45,15 +46,15 @@ export default function MyTicketsPage() {
       if (result.success === "false" || result.success === false) {
         toast({
           variant: "destructive",
-          title: "Request Failed",
+          title: "Notice",
           description: result.msg || "We couldn't find any tickets associated with this email.",
         });
-      } else {
+      } else if (result.success === "true" || result.success === true) {
         toast({
-          title: "Request Sent",
-          description: result.msg || "If an account exists with this email, your tickets have been sent.",
+          title: "Success",
+          description: "Redirecting to your ticket...",
         });
-        form.reset();
+        router.push(`/ticket/${encodeURIComponent(values.email)}`);
       }
     } catch (error: any) {
       toast({
@@ -74,14 +75,14 @@ export default function MyTicketsPage() {
         </Link>
       </Button>
 
-      <Card className="border-none shadow-2xl rounded-3xl overflow-hidden bg-white/80 backdrop-blur-sm border-t-8 border-t-primary">
-        <CardHeader className="space-y-2 p-8 text-center bg-secondary/10">
-          <div className="mx-auto bg-primary/10 w-16 h-16 rounded-full flex items-center justify-center mb-2">
-            <Ticket className="w-8 h-8 text-primary" />
+      <Card className="border-none shadow-2xl rounded-3xl overflow-hidden bg-zinc-900 border-t-8 border-t-yellow-400">
+        <CardHeader className="space-y-2 p-8 text-center bg-zinc-800/50">
+          <div className="mx-auto bg-yellow-400/10 w-16 h-16 rounded-full flex items-center justify-center mb-2 border border-yellow-400/20">
+            <Ticket className="w-8 h-8 text-yellow-400" />
           </div>
-          <CardTitle className="font-headline text-3xl font-black text-foreground">Find My Tickets</CardTitle>
-          <CardDescription className="text-base">
-            Enter your email to retrieve your tickets.
+          <CardTitle className="font-headline text-3xl font-black text-white">Find My Tickets</CardTitle>
+          <CardDescription className="text-zinc-400">
+            Enter your email to retrieve your ticket.
           </CardDescription>
         </CardHeader>
         <CardContent className="p-8">
@@ -92,11 +93,11 @@ export default function MyTicketsPage() {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-lg font-bold">Email Address</FormLabel>
+                    <FormLabel className="text-lg font-bold text-zinc-300">Email Address</FormLabel>
                     <FormControl>
                       <Input 
                         placeholder="name@university.edu" 
-                        className="h-12 rounded-xl" 
+                        className="h-12 rounded-xl bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500" 
                         {...field} 
                       />
                     </FormControl>
@@ -108,7 +109,7 @@ export default function MyTicketsPage() {
               <Button 
                 type="submit" 
                 disabled={isSubmitting} 
-                className="w-full h-14 bg-primary hover:bg-primary/90 font-headline text-xl rounded-2xl shadow-lg shadow-primary/20 text-white"
+                className="w-full h-14 bg-yellow-400 hover:bg-yellow-500 font-headline text-xl rounded-2xl shadow-lg shadow-yellow-400/10 text-black font-black"
               >
                 {isSubmitting ? (
                   <>
@@ -118,7 +119,7 @@ export default function MyTicketsPage() {
                 ) : (
                   <>
                     <Send className="mr-2 h-5 w-5" />
-                    Retrieve Tickets
+                    Retrieve Ticket
                   </>
                 )}
               </Button>

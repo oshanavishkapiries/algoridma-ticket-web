@@ -5,52 +5,26 @@
 
 @layer base {
   :root {
-    --background: 6 41% 98%;
-    --foreground: 6 63% 10%;
-    --card: 0 0% 100%;
-    --card-foreground: 6 63% 10%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 6 63% 10%;
-    --primary: 6 63% 46%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 6 41% 89%;
-    --secondary-foreground: 6 63% 20%;
-    --muted: 6 20% 94%;
-    --muted-foreground: 6 20% 40%;
-    --accent: 24 100% 41%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 6 20% 90%;
-    --input: 6 20% 90%;
-    --ring: 6 63% 46%;
-    --chart-1: 6 63% 46%;
-    --chart-2: 24 100% 41%;
-    --chart-3: 6 41% 30%;
-    --chart-4: 15 80% 50%;
-    --chart-5: 0 50% 60%;
-    --radius: 0.75rem;
-  }
-  .dark {
-    --background: 6 63% 5%;
-    --foreground: 6 41% 98%;
-    --card: 6 63% 8%;
-    --card-foreground: 6 41% 98%;
-    --popover: 6 63% 8%;
-    --popover-foreground: 6 41% 98%;
-    --primary: 6 63% 56%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 6 41% 15%;
-    --secondary-foreground: 6 41% 98%;
-    --muted: 6 41% 15%;
-    --muted-foreground: 6 20% 65%;
-    --accent: 24 100% 50%;
-    --accent-foreground: 0 0% 100%;
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 47.9 95.8% 53.1%;
+    --primary-foreground: 26 83.3% 1.1%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 47.9 95.8% 53.1%;
+    --accent-foreground: 26 83.3% 1.1%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    --border: 6 41% 20%;
-    --input: 6 41% 20%;
-    --ring: 6 63% 56%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 47.9 95.8% 53.1%;
+    --radius: 0.75rem;
   }
 }
 
@@ -59,6 +33,17 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-body;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-headline;
+  }
+}
+
+@layer utilities {
+  .no-print {
+    @media print {
+      display: none !important;
+    }
   }
 }
