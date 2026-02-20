@@ -75,10 +75,10 @@ export default function MyTicketsPage() {
         </Link>
       </Button>
 
-      <Card className="border-none shadow-2xl rounded-3xl overflow-hidden bg-zinc-900 border-t-8 border-t-yellow-400">
+      <Card className="border-none shadow-2xl  overflow-hidden bg-zinc-900 border-t-8">
         <CardHeader className="space-y-2 p-8 text-center bg-zinc-800/50">
-          <div className="mx-auto bg-yellow-400/10 w-16 h-16 rounded-full flex items-center justify-center mb-2 border border-yellow-400/20">
-            <Ticket className="w-8 h-8 text-yellow-400" />
+          <div className="mx-auto w-16 h-16 rounded-full flex items-center justify-center mb-2 border">
+            <Ticket className="w-8 h-8" />
           </div>
           <CardTitle className="font-headline text-3xl font-black text-white">Find My Tickets</CardTitle>
           <CardDescription className="text-zinc-400">
@@ -97,7 +97,7 @@ export default function MyTicketsPage() {
                     <FormControl>
                       <Input 
                         placeholder="name@university.edu" 
-                        className="h-12 rounded-xl bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500" 
+                        className="h-12  bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500" 
                         {...field} 
                       />
                     </FormControl>
@@ -109,7 +109,7 @@ export default function MyTicketsPage() {
               <Button 
                 type="submit" 
                 disabled={isSubmitting} 
-                className="w-full h-14 bg-yellow-400 hover:bg-yellow-500 font-headline text-xl rounded-2xl shadow-lg shadow-yellow-400/10 text-black font-black"
+                className="w-full h-14 font-headline text-xl  shadow-lg text-black font-black"
               >
                 {isSubmitting ? (
                   <>

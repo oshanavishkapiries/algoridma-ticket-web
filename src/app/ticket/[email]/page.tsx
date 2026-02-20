@@ -1,12 +1,14 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Loader2, Download, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { toPng } from 'html-to-image';
+import { useToast } from "@/hooks/use-toast";
 
 interface TicketData {
   name: string;
@@ -16,9 +18,12 @@ interface TicketData {
 
 export default function TicketDisplayPage() {
   const { email } = useParams();
+  const { toast } = useToast();
   const [data, setData] = useState<TicketData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isDownloading, setIsDownloading] = useState(false);
+  const ticketRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     async function fetchTicket() {
@@ -48,8 +53,39 @@ export default function TicketDisplayPage() {
     if (email) fetchTicket();
   }, [email]);
 
-  const handleDownload = () => {
-    window.print();
+  const handleDownload = async () => {
+    if (!ticketRef.current) return;
+    
+    setIsDownloading(true);
+    try {
+      // Small delay to ensure any dynamic parts (like the QR) are fully rendered
+      const dataUrl = await toPng(ticketRef.current, { 
+        cacheBust: true,
+        backgroundColor: '#000000',
+        style: {
+          borderRadius: '20px'
+        }
+      });
+      
+      const link = document.createElement('a');
+      link.download = `Algoridma-Ticket-${data?.id || 'entry'}.png`;
+      link.href = dataUrl;
+      link.click();
+      
+      toast({
+        title: "Download Started",
+        description: "Your ticket is being saved to your device.",
+      });
+    } catch (err) {
+      console.error('Download failed', err);
+      toast({
+        variant: "destructive",
+        title: "Download Failed",
+        description: "We couldn't generate the ticket image. Please try again or take a screenshot.",
+      });
+    } finally {
+      setIsDownloading(false);
+    }
   };
 
   if (loading) {
@@ -80,21 +116,25 @@ export default function TicketDisplayPage() {
         <Button variant="outline" asChild className="border-yellow-400/50 text-yellow-400 hover:bg-yellow-400/10">
           <Link href="/my-tickets"><ArrowLeft className="w-4 h-4 mr-2" /> Back</Link>
         </Button>
-        <Button onClick={handleDownload} className="bg-yellow-400 hover:bg-yellow-500 text-black font-black shadow-lg shadow-yellow-400/20">
-          <Download className="w-4 h-4 mr-2" /> Download Ticket
+        <Button 
+          onClick={handleDownload} 
+          disabled={isDownloading}
+          className="bg-yellow-400 hover:bg-yellow-500 text-black font-black shadow-lg shadow-yellow-400/20"
+        >
+          {isDownloading ? (
+            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+          ) : (
+            <Download className="w-4 h-4 mr-2" />
+          )}
+          {isDownloading ? "Generating..." : "Download PNG"}
         </Button>
       </div>
 
-      <style jsx global>{`
-        @media print {
-          .no-print { display: none !important; }
-          body { background: white !important; }
-          .ticket-container { box-shadow: none !important; border: 2px solid #FFD700 !important; }
-        }
-      `}</style>
-
       {/* Ticket UI Implementation */}
-      <div className="ticket-container bg-black w-[350px] rounded-[20px] overflow-hidden shadow-[0_30px_60px_rgba(0,0,0,0.7)] border-2 border-yellow-400 relative">
+      <div 
+        ref={ticketRef}
+        className="ticket-container bg-black w-[350px] rounded-[20px] overflow-hidden shadow-[0_30px_60px_rgba(0,0,0,0.7)] border-2 border-yellow-400 relative"
+      >
         {/* Top: Poster */}
         <div className="w-full h-[200px] border-b-[5px] border-yellow-400 relative">
           <Image 
@@ -103,11 +143,12 @@ export default function TicketDisplayPage() {
             fill
             className="object-cover"
             priority
+            unoptimized // Helps html-to-image by not using next's internal loader for this specific capture
           />
         </div>
 
         {/* Main Content */}
-        <div className="p-[25px] text-center">
+        <div className="p-[25px] text-center bg-black">
           <h1 className="text-[2.4rem] font-black uppercase text-yellow-400 m-0 tracking-[2px] italic leading-tight">
             Algoridma
           </h1>
@@ -132,19 +173,24 @@ export default function TicketDisplayPage() {
         {/* QR Section */}
         <div className="bg-yellow-400 p-[25px] flex flex-col items-center relative">
           {/* Notches */}
-          <div className="absolute bg-[#1a1a1a] w-[30px] h-[30px] rounded-full top-[-15px] left-[-15px]"></div>
-          <div className="absolute bg-[#1a1a1a] w-[30px] h-[30px] rounded-full top-[-15px] right-[-15px]"></div>
+          <div className="absolute bg-background w-[30px] h-[30px] rounded-full top-[-15px] left-[-15px]"></div>
+          <div className="absolute bg-background w-[30px] h-[30px] rounded-full top-[-15px] right-[-15px]"></div>
           
           <div className="bg-white p-2 rounded shadow-lg">
             <img 
               src={data.qr_url || `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${data.id}`} 
               alt="QR Code" 
               className="w-[120px] h-[120px] block"
+              crossOrigin="anonymous" // Required for html-to-image to work with external images
             />
           </div>
           <div className="mt-2.5 font-black text-black text-[0.8rem] tracking-widest">SCAN FOR ENTRY</div>
         </div>
       </div>
+      
+      <p className="mt-8 text-zinc-500 text-sm">
+        Ticket generated for {decodeURIComponent(email as string)}
+      </p>
     </div>
   );
 }

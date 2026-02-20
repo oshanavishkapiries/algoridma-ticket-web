@@ -2,8 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Ticket, Menu, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Ticket, Menu, X, Wallet } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
@@ -13,6 +12,7 @@ export function Navbar() {
 
   const navLinks = [
     { name: "My Tickets", href: "/my-tickets", icon: Ticket },
+    { name: "Buy Ticket", href: "/buy-ticket", icon: Wallet },
   ];
 
   return (
@@ -42,9 +42,6 @@ export function Navbar() {
               {link.name}
             </Link>
           ))}
-          <Button asChild className="bg-primary hover:bg-primary/90 font-headline text-white">
-            <Link href="/buy-ticket">Buy Ticket</Link>
-          </Button>
         </div>
 
         {/* Mobile Toggle */}
@@ -74,9 +71,6 @@ export function Navbar() {
                 {link.name}
               </Link>
             ))}
-            <Button asChild className="w-full bg-primary font-headline mt-2 text-white">
-              <Link href="/buy-ticket" onClick={() => setIsOpen(false)}>Buy Ticket</Link>
-            </Button>
           </div>
         </div>
       )}
