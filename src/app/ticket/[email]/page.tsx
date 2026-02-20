@@ -62,7 +62,7 @@ export default function TicketDisplayPage() {
         cacheBust: true,
         backgroundColor: '#1a1a1a', // Match the outer background for clean rounded corners
         style: {
-          borderRadius: '20px'
+          borderRadius: '0px'
         }
       });
       
@@ -112,13 +112,13 @@ export default function TicketDisplayPage() {
   return (
     <div className="container mx-auto px-4 py-12 flex flex-col items-center justify-center min-h-screen bg-[#1a1a1a]">
       <div className="mb-8 flex gap-4">
-        <Button variant="outline" asChild className="border-yellow-400/50 text-yellow-400 hover:bg-yellow-400/10">
+        <Button variant="outline" asChild className="">
           <Link href="/my-tickets"><ArrowLeft className="w-4 h-4 mr-2" /> Back</Link>
         </Button>
         <Button 
           onClick={handleDownload} 
           disabled={isDownloading}
-          className="bg-yellow-400 hover:bg-yellow-500 text-black font-black shadow-lg shadow-yellow-400/20"
+          className=" text-black font-black shadow-lg"
         >
           {isDownloading ? (
             <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -132,11 +132,11 @@ export default function TicketDisplayPage() {
       {/* Ticket UI - Portable HTML Template */}
       <div 
         ref={ticketRef}
-        className="ticket bg-black w-[350px] rounded-[20px] overflow-hidden shadow-[0_30px_60px_rgba(0,0,0,0.7)] border-2 border-[#FFD700] relative"
+        className="ticket bg-black w-[350px] overflow-hidden shadow-[0_30px_60px_rgba(0,0,0,0.7)] border-2 border-[#FFD700] relative"
         style={{ fontFamily: "'Segoe UI', Roboto, sans-serif" }}
       >
         {/* Top: Poster */}
-        <div className="poster w-full h-[200px] border-b-[5px] border-[#FFD700] relative">
+        <div className="poster w-full h-[300px] border-b-[5px] border-[#FFD700] relative">
           <img 
             src="https://i.ibb.co/0VVxTgxQ/Whats-App-Image-2026-02-19-at-12-38-32.jpg" 
             alt="Poster" 
