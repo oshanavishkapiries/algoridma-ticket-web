@@ -8,8 +8,8 @@ import * as z from "zod";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { Upload, CheckCircle2, Loader2, ArrowLeft } from "lucide-react";
 import Link from "next/link";
@@ -18,6 +18,9 @@ import Image from "next/image";
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Invalid email address"),
+  batch: z.string({
+    required_error: "Please select a batch",
+  }),
   bankSlip: z.any().refine((file) => file?.length > 0, "Bank slip image is required"),
 });
 
@@ -32,6 +35,7 @@ export default function BuyTicketPage() {
     defaultValues: {
       name: "",
       email: "",
+      batch: "",
     },
   });
 
@@ -51,6 +55,7 @@ export default function BuyTicketPage() {
       const payload = {
         name: values.name,
         email: values.email,
+        batch: values.batch,
         bankSlip: base64Image,
       };
 
@@ -106,7 +111,7 @@ export default function BuyTicketPage() {
               We let you know after verifying your payment slip. Your ticket will be sent to your email shortly.
             </p>
           </div>
-          <Button asChild className="w-full bg-primary hover:bg-primary/90 rounded-xl h-12 font-headline text-lg">
+          <Button asChild className="w-full bg-primary hover:bg-primary/90 rounded-xl h-12 font-headline text-lg text-white">
             <Link href="/">Back to Home</Link>
           </Button>
         </Card>
@@ -162,6 +167,32 @@ export default function BuyTicketPage() {
 
               <FormField
                 control={form.control}
+                name="batch"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-lg font-bold">Batch</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger className="h-12 rounded-xl">
+                          <SelectValue placeholder="Select your batch" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="71">Batch 71</SelectItem>
+                        <SelectItem value="73">Batch 73</SelectItem>
+                        <SelectItem value="75">Batch 75</SelectItem>
+                        <SelectItem value="foundation">Foundation</SelectItem>
+                        <SelectItem value="CMJD">CMJD</SelectItem>
+                        <SelectItem value="other">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
                 name="bankSlip"
                 render={({ field: { value, onChange, ...field } }) => (
                   <FormItem>
@@ -207,7 +238,7 @@ export default function BuyTicketPage() {
               <Button 
                 type="submit" 
                 disabled={isSubmitting} 
-                className="w-full h-14 bg-primary hover:bg-primary/90 font-headline text-xl rounded-2xl shadow-lg shadow-primary/20"
+                className="w-full h-14 bg-primary hover:bg-primary/90 font-headline text-xl rounded-2xl shadow-lg shadow-primary/20 text-white"
               >
                 {isSubmitting ? (
                   <>
