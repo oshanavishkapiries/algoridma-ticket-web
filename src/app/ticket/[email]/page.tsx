@@ -27,7 +27,7 @@ export default function TicketDisplayPage() {
   useEffect(() => {
     async function fetchTicket() {
       try {
-        const response = await fetch("https://central.elight.lk/webhook-test/ijse-algo-ridma/my-tickets", {
+        const response = await fetch("https://central.elight.lk/webhook/ijse-algo-ridma/my-tickets", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

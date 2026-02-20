@@ -33,7 +33,7 @@ export default function MyTicketsPage() {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsSubmitting(true);
     try {
-      const response = await fetch("https://central.elight.lk/webhook-test/ijse-algo-ridma/my-tickets", {
+      const response = await fetch("https://central.elight.lk/webhook/ijse-algo-ridma/my-tickets", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

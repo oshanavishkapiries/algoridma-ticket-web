@@ -58,7 +58,7 @@ export default function BuyTicketPage() {
         bankSlip: base64Image,
       };
 
-      const response = await fetch("https://central.elight.lk/webhook-test/ijse-algo-ridma/buy", {
+      const response = await fetch("https://central.elight.lk/webhook/ijse-algo-ridma/buy", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
