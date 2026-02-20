@@ -1,4 +1,3 @@
-
 "use client";
 
 import Link from "next/link";
@@ -13,7 +12,7 @@ export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   const navLinks = [
-    { name: "My Tickets", href: "/profile", icon: Ticket },
+    { name: "My Tickets", href: "/my-tickets", icon: Ticket },
   ];
 
   return (
@@ -43,7 +42,7 @@ export function Navbar() {
               {link.name}
             </Link>
           ))}
-          <Button asChild className="bg-primary hover:bg-primary/90 font-headline">
+          <Button asChild className="bg-primary hover:bg-primary/90 font-headline text-white">
             <Link href="/buy-ticket">Buy Ticket</Link>
           </Button>
         </div>
@@ -75,7 +74,7 @@ export function Navbar() {
                 {link.name}
               </Link>
             ))}
-            <Button asChild className="w-full bg-primary font-headline mt-2">
+            <Button asChild className="w-full bg-primary font-headline mt-2 text-white">
               <Link href="/buy-ticket" onClick={() => setIsOpen(false)}>Buy Ticket</Link>
             </Button>
           </div>
