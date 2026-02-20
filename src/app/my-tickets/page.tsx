@@ -75,10 +75,10 @@ export default function MyTicketsPage() {
         </Link>
       </Button>
 
-      <Card className="border-none shadow-2xl  overflow-hidden bg-zinc-900 border-t-8">
+      <Card className="border-none shadow-2xl  overflow-hidden bg-zinc-900 border-t-8 border-t-primary">
         <CardHeader className="space-y-2 p-8 text-center bg-zinc-800/50">
-          <div className="mx-auto w-16 h-16 rounded-full flex items-center justify-center mb-2 border">
-            <Ticket className="w-8 h-8" />
+          <div className="mx-auto w-16 h-16 rounded-full flex items-center justify-center mb-2 border border-primary/20">
+            <Ticket className="w-8 h-8 text-primary" />
           </div>
           <CardTitle className="font-headline text-3xl font-black text-white">Find My Tickets</CardTitle>
           <CardDescription className="text-zinc-400">
@@ -108,8 +108,9 @@ export default function MyTicketsPage() {
 
               <Button 
                 type="submit" 
+                variant="outline"
                 disabled={isSubmitting} 
-                className="w-full h-14 font-headline text-xl  shadow-lg text-black font-black"
+                className="w-full h-14 font-headline text-xl"
               >
                 {isSubmitting ? (
                   <>
