@@ -4,7 +4,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { User, Ticket, Settings, Bell, ChevronRight, LogOut, QrCode } from "lucide-react";
+import { User, Ticket, Settings, Bell, ChevronRight, LogOut, QrCode, Calendar } from "lucide-react";
 import { MOCK_EVENTS } from "@/app/lib/events";
 import Link from "next/link";
 
