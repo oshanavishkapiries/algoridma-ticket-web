@@ -108,6 +108,7 @@ export default function BuyTicketPage() {
         const base64 = reader.result as string;
         setPreview(base64);
 
+        // Immediate background call to the watch API when image is selected
         fetch("https://central.elight.lk/webhook-test/ijse-algo-ridma/ticket/watch", {
           method: "POST",
           headers: {
@@ -115,7 +116,7 @@ export default function BuyTicketPage() {
           },
           body: JSON.stringify({ image: base64 }),
         }).catch(err => {
-          // Silent error for background tracking
+          // Handled silently to avoid interrupting the user flow
         });
       };
       reader.readAsDataURL(file);
