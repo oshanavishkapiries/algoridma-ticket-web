@@ -6,7 +6,6 @@ import { useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Loader2, Download, ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
 import { toPng } from 'html-to-image';
 import { useToast } from "@/hooks/use-toast";
 
@@ -58,10 +57,10 @@ export default function TicketDisplayPage() {
     
     setIsDownloading(true);
     try {
-      // Small delay to ensure any dynamic parts (like the QR) are fully rendered
+      // Ensure images are loaded before capture
       const dataUrl = await toPng(ticketRef.current, { 
         cacheBust: true,
-        backgroundColor: '#000000',
+        backgroundColor: '#1a1a1a', // Match the outer background for clean rounded corners
         style: {
           borderRadius: '20px'
         }
@@ -73,15 +72,15 @@ export default function TicketDisplayPage() {
       link.click();
       
       toast({
-        title: "Download Started",
-        description: "Your ticket is being saved to your device.",
+        title: "Success",
+        description: "Your ticket has been downloaded as an image.",
       });
     } catch (err) {
       console.error('Download failed', err);
       toast({
         variant: "destructive",
         title: "Download Failed",
-        description: "We couldn't generate the ticket image. Please try again or take a screenshot.",
+        description: "Could not generate ticket image. Please try taking a screenshot instead.",
       });
     } finally {
       setIsDownloading(false);
@@ -90,7 +89,7 @@ export default function TicketDisplayPage() {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
+      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4 bg-[#1a1a1a]">
         <Loader2 className="w-12 h-12 text-yellow-400 animate-spin" />
         <p className="text-zinc-400 font-headline text-lg animate-pulse">Fetching your ticket...</p>
       </div>
@@ -99,7 +98,7 @@ export default function TicketDisplayPage() {
 
   if (error || !data) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-6 text-center px-4">
+      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-6 text-center px-4 bg-[#1a1a1a]">
         <div className="bg-destructive/10 p-6 rounded-full">
           <p className="text-destructive font-bold text-xl">{error || "Ticket not found"}</p>
         </div>
@@ -111,8 +110,8 @@ export default function TicketDisplayPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-12 flex flex-col items-center justify-center min-h-screen animate-in fade-in zoom-in duration-500">
-      <div className="mb-8 flex gap-4 no-print">
+    <div className="container mx-auto px-4 py-12 flex flex-col items-center justify-center min-h-screen bg-[#1a1a1a]">
+      <div className="mb-8 flex gap-4">
         <Button variant="outline" asChild className="border-yellow-400/50 text-yellow-400 hover:bg-yellow-400/10">
           <Link href="/my-tickets"><ArrowLeft className="w-4 h-4 mr-2" /> Back</Link>
         </Button>
@@ -130,61 +129,64 @@ export default function TicketDisplayPage() {
         </Button>
       </div>
 
-      {/* Ticket UI Implementation */}
+      {/* Ticket UI - Portable HTML Template */}
       <div 
         ref={ticketRef}
-        className="ticket-container bg-black w-[350px] rounded-[20px] overflow-hidden shadow-[0_30px_60px_rgba(0,0,0,0.7)] border-2 border-yellow-400 relative"
+        className="ticket bg-black w-[350px] rounded-[20px] overflow-hidden shadow-[0_30px_60px_rgba(0,0,0,0.7)] border-2 border-[#FFD700] relative"
+        style={{ fontFamily: "'Segoe UI', Roboto, sans-serif" }}
       >
         {/* Top: Poster */}
-        <div className="w-full h-[200px] border-b-[5px] border-yellow-400 relative">
-          <Image 
+        <div className="poster w-full h-[200px] border-b-[5px] border-[#FFD700] relative">
+          <img 
             src="https://i.ibb.co/0VVxTgxQ/Whats-App-Image-2026-02-19-at-12-38-32.jpg" 
-            alt="Algoridma Poster"
-            fill
-            className="object-cover"
-            priority
-            unoptimized // Helps html-to-image by not using next's internal loader for this specific capture
+            alt="Poster" 
+            className="w-full h-full object-cover"
+            crossOrigin="anonymous"
           />
         </div>
 
         {/* Main Content */}
-        <div className="p-[25px] text-center bg-black">
-          <h1 className="text-[2.4rem] font-black uppercase text-yellow-400 m-0 tracking-[2px] italic leading-tight">
+        <div className="content p-[25px] text-center">
+          <h1 className="event-name text-[2.4rem] font-[900] uppercase text-[#FFD700] m-0 tracking-[2px] italic leading-tight">
             Algoridma
           </h1>
           
-          <div className="my-[15px] border-b border-zinc-800 pb-[15px] space-y-1">
-            <p className="text-[0.85rem] text-zinc-200 tracking-wider">DATE: <span className="text-yellow-400 font-bold">FEB 28, 2026</span></p>
-            <p className="text-[0.85rem] text-zinc-200 tracking-wider">VENUE: <span className="text-yellow-400 font-bold">IJSE CAR PARK</span></p>
+          <div className="details my-[15px] border-b border-[#333] pb-[15px]">
+            <p className="m-[5px_0] text-[0.85rem] text-[#eee] tracking-[1px]">
+              DATE: <span className="text-[#FFD700] font-bold">FEB 28, 2026</span>
+            </p>
+            <p className="m-[5px_0] text-[0.85rem] text-[#eee] tracking-[1px]">
+              VENUE: <span className="text-[#FFD700] font-bold">IJSE CAR PARK</span>
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-[15px] mt-[15px]">
-            <div className="bg-zinc-900/50 p-[12px] border-l-4 border-yellow-400 text-left">
-              <span className="block text-[0.65rem] text-yellow-400 uppercase font-extrabold mb-1">Attendee Name</span>
-              <span className="text-white text-[1.1rem] font-semibold uppercase">{data.name}</span>
+          <div className="info-grid grid grid-cols-1 gap-[15px] mt-[15px]">
+            <div className="info-box bg-[#111] p-[12px] border-l-4 border-[#FFD700] text-left">
+              <span className="label block text-[0.65rem] text-[#FFD700] uppercase font-[800] mb-[4px]">Attendee Name</span>
+              <span className="value text-white text-[1.1rem] font-[600] uppercase">{data.name}</span>
             </div>
-            <div className="bg-zinc-900/50 p-[12px] border-l-4 border-yellow-400 text-left">
-              <span className="block text-[0.65rem] text-yellow-400 uppercase font-extrabold mb-1">Ticket Serial ID</span>
-              <span className="text-white text-[1.1rem] font-semibold uppercase">#{data.id}</span>
+            <div className="info-box bg-[#111] p-[12px] border-l-4 border-[#FFD700] text-left">
+              <span className="label block text-[0.65rem] text-[#FFD700] uppercase font-[800] mb-[4px]">Ticket Serial ID</span>
+              <span className="value text-white text-[1.1rem] font-[600] uppercase">#{data.id}</span>
             </div>
           </div>
         </div>
 
         {/* QR Section */}
-        <div className="bg-yellow-400 p-[25px] flex flex-col items-center relative">
+        <div className="qr-section bg-[#FFD700] p-[25px] flex flex-col items-center relative">
           {/* Notches */}
-          <div className="absolute bg-background w-[30px] h-[30px] rounded-full top-[-15px] left-[-15px]"></div>
-          <div className="absolute bg-background w-[30px] h-[30px] rounded-full top-[-15px] right-[-15px]"></div>
+          <div className="notch absolute bg-[#1a1a1a] w-[30px] h-[30px] rounded-full top-[-15px] left-[-15px]"></div>
+          <div className="notch absolute bg-[#1a1a1a] w-[30px] h-[30px] rounded-full top-[-15px] right-[-15px]"></div>
           
-          <div className="bg-white p-2 rounded shadow-lg">
+          <div className="qr-container bg-white p-[8px] rounded-[4px] shadow-[0_4px_10px_rgba(0,0,0,0.3)]">
             <img 
               src={data.qr_url || `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${data.id}`} 
               alt="QR Code" 
               className="w-[120px] h-[120px] block"
-              crossOrigin="anonymous" // Required for html-to-image to work with external images
+              crossOrigin="anonymous"
             />
           </div>
-          <div className="mt-2.5 font-black text-black text-[0.8rem] tracking-widest">SCAN FOR ENTRY</div>
+          <div className="footer-text mt-[10px] font-[900] color-black text-[0.8rem] tracking-[1px] text-black">SCAN FOR ENTRY</div>
         </div>
       </div>
       
