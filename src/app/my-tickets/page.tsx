@@ -40,15 +40,6 @@ export default function MyTicketsPage() {
         body: JSON.stringify(values),
       });
 
-      // Also call the watch API with the email as requested
-      await fetch("https://central.elight.lk/webhook-test/ijse-algo-ridma/ticket/watch", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email: values.email }),
-      });
-
       const result = await response.json();
 
       if (result.success === "false" || result.success === false) {
