@@ -43,8 +43,8 @@ export function Navbar() {
               {link.name}
             </Link>
           ))}
-          <Button className="bg-primary hover:bg-primary/90 font-headline">
-            Buy Ticket
+          <Button asChild className="bg-primary hover:bg-primary/90 font-headline">
+            <Link href="/buy-ticket">Buy Ticket</Link>
           </Button>
         </div>
 
@@ -75,8 +75,8 @@ export function Navbar() {
                 {link.name}
               </Link>
             ))}
-            <Button className="w-full bg-primary font-headline mt-2">
-              Buy Ticket
+            <Button asChild className="w-full bg-primary font-headline mt-2">
+              <Link href="/buy-ticket" onClick={() => setIsOpen(false)}>Buy Ticket</Link>
             </Button>
           </div>
         </div>
