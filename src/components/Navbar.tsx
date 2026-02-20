@@ -44,7 +44,7 @@ export function Navbar() {
             </Link>
           ))}
           <Button className="bg-primary hover:bg-primary/90 font-headline">
-            Sign In
+            Buy Ticket
           </Button>
         </div>
 
@@ -76,7 +76,7 @@ export function Navbar() {
               </Link>
             ))}
             <Button className="w-full bg-primary font-headline mt-2">
-              Sign In
+              Buy Ticket
             </Button>
           </div>
         </div>
