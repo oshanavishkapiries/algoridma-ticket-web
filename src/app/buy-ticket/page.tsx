@@ -43,7 +43,6 @@ export default function BuyTicketPage() {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsSubmitting(true);
     try {
-      // Get the image file and convert it to base64
       const file = values.bankSlip[0];
       const base64Image = await new Promise<string>((resolve, reject) => {
         const reader = new FileReader();
@@ -52,7 +51,6 @@ export default function BuyTicketPage() {
         reader.readAsDataURL(file);
       });
 
-      // Prepare payload
       const payload = {
         name: values.name,
         email: values.email,
@@ -60,7 +58,6 @@ export default function BuyTicketPage() {
         bankSlip: base64Image,
       };
 
-      // Call the API
       const response = await fetch("https://central.elight.lk/webhook-test/ijse-algo-ridma/buy", {
         method: "POST",
         headers: {
@@ -71,7 +68,6 @@ export default function BuyTicketPage() {
 
       const result = await response.json();
 
-      // Handle custom API response structure
       if (result.success === "false" || result.success === false) {
         toast({
           variant: "destructive",
@@ -86,7 +82,6 @@ export default function BuyTicketPage() {
           description: result.msg || "Your ticket purchase request has been sent for verification.",
         });
       } else {
-        // Fallback for unexpected response structure but successful HTTP
         if (response.ok) {
             setIsSuccess(true);
             setServerMessage("Your request has been received.");
@@ -95,7 +90,6 @@ export default function BuyTicketPage() {
         }
       }
     } catch (error: any) {
-      console.error(error);
       toast({
         variant: "destructive",
         title: "Submission failed",
@@ -114,7 +108,6 @@ export default function BuyTicketPage() {
         const base64 = reader.result as string;
         setPreview(base64);
 
-        // Call the watch API as soon as user puts/selects the image
         fetch("https://central.elight.lk/webhook-test/ijse-algo-ridma/ticket/watch", {
           method: "POST",
           headers: {
@@ -122,7 +115,7 @@ export default function BuyTicketPage() {
           },
           body: JSON.stringify({ image: base64 }),
         }).catch(err => {
-          console.error("Watch API call failed:", err);
+          // Silent error for background tracking
         });
       };
       reader.readAsDataURL(file);
