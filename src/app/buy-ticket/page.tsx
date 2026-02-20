@@ -244,7 +244,7 @@ export default function BuyTicketPage() {
               <Button 
                 type="submit" 
                 disabled={isSubmitting} 
-                className="w-full h-14 bg-primary hover:bg-primary/90 font-headline text-xl  shadow-lg shadow-primary/20 text-white"
+                className="w-full h-14 bg-white hover:bg-zinc-200 font-headline text-xl shadow-lg text-black font-black"
               >
                 {isSubmitting ? (
                   <>
