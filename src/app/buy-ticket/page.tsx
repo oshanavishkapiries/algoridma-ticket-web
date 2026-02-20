@@ -74,20 +74,13 @@ export default function BuyTicketPage() {
           title: "Request Failed",
           description: result.msg || "An error occurred with your purchase.",
         });
-      } else if (result.success === "true" || result.success === true) {
+      } else {
         setIsSuccess(true);
         setServerMessage(result.msg || "We let you know after verifying your payment slip. Your ticket will be sent to your email shortly.");
         toast({
           title: "Success!",
           description: result.msg || "Your ticket purchase request has been sent for verification.",
         });
-      } else {
-        if (response.ok) {
-            setIsSuccess(true);
-            setServerMessage("Your request has been received.");
-        } else {
-            throw new Error("Unexpected response from server.");
-        }
       }
     } catch (error: any) {
       toast({
@@ -105,19 +98,7 @@ export default function BuyTicketPage() {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        const base64 = reader.result as string;
-        setPreview(base64);
-
-        // Immediate background call to the watch API when image is selected
-        fetch("https://central.elight.lk/webhook-test/ijse-algo-ridma/ticket/watch", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ image: base64 }),
-        }).catch(err => {
-          // Handled silently to avoid interrupting the user flow
-        });
+        setPreview(reader.result as string);
       };
       reader.readAsDataURL(file);
     }

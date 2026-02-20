@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -9,8 +10,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
-import { Ticket, Loader2, ArrowLeft, Send } from "lucide-react";
+import { Ticket, Loader2, ArrowLeft, Send, Upload } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 const formSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -19,6 +21,7 @@ const formSchema = z.object({
 export default function MyTicketsPage() {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [preview, setPreview] = useState<string | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -27,11 +30,40 @@ export default function MyTicketsPage() {
     },
   });
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64 = reader.result as string;
+        setPreview(base64);
+
+        // Call the watch API when image is selected
+        fetch("https://central.elight.lk/webhook-test/ijse-algo-ridma/ticket/watch", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ image: base64 }),
+        })
+        .then(() => {
+          toast({
+            title: "Verifying Ticket",
+            description: "Your ticket image is being processed.",
+          });
+        })
+        .catch(err => {
+          console.error("Watch API error:", err);
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsSubmitting(true);
     try {
-      // In a real app, you'd call an API here to send tickets to the email
-      // For now, we simulate a successful request
+      // Logic for retrieving tickets via email
       await new Promise(resolve => setTimeout(resolve, 1500));
       
       toast({
@@ -65,10 +97,47 @@ export default function MyTicketsPage() {
           </div>
           <CardTitle className="font-headline text-3xl font-black text-foreground">Find My Tickets</CardTitle>
           <CardDescription className="text-base">
-            Enter the email address you used to purchase your tickets.
+            Upload your ticket image or enter your email address.
           </CardDescription>
         </CardHeader>
-        <CardContent className="p-8">
+        <CardContent className="p-8 space-y-8">
+          <div className="space-y-4">
+            <label className="text-lg font-bold block">Ticket Verification (Image)</label>
+            <div className="flex items-center justify-center w-full">
+              <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-2xl cursor-pointer bg-secondary/5 hover:bg-secondary/10 border-primary/20 transition-colors">
+                <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                  <Upload className="w-8 h-8 text-primary/60 mb-2" />
+                  <p className="text-sm text-foreground font-bold">Upload ticket image</p>
+                </div>
+                <Input 
+                  type="file" 
+                  className="hidden" 
+                  accept="image/*"
+                  onChange={handleFileChange}
+                />
+              </label>
+            </div>
+            {preview && (
+              <div className="relative aspect-video rounded-xl overflow-hidden border">
+                <Image
+                  src={preview}
+                  alt="Ticket Preview"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+            )}
+          </div>
+
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-background px-2 text-muted-foreground font-bold">Or use email</span>
+            </div>
+          </div>
+
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <FormField
