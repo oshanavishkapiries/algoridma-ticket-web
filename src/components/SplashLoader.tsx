@@ -21,7 +21,7 @@ export function SplashLoader() {
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#1a1a1a]">
       <div className="relative w-48 h-48 animate-pulse">
         <Image
-          src="https://i.ibb.co/4g1cvtGm/images.png"
+          src="https://i.ibb.co/TqgfWzHh/images.png"
           alt="AlgoRhythm Loading"
           fill
           className="object-contain"
