@@ -29,6 +29,7 @@ export default function BuyTicketPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [preview, setPreview] = useState<string | null>(null);
+  const [serverMessage, setServerMessage] = useState("");
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -68,15 +69,31 @@ export default function BuyTicketPage() {
         body: JSON.stringify(payload),
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to submit request.");
-      }
+      const result = await response.json();
 
-      setIsSuccess(true);
-      toast({
-        title: "Submission Successful!",
-        description: "Your ticket purchase request has been sent for verification.",
-      });
+      // Handle custom API response structure
+      if (result.success === "false" || result.success === false) {
+        toast({
+          variant: "destructive",
+          title: "Request Failed",
+          description: result.msg || "An error occurred with your purchase.",
+        });
+      } else if (result.success === "true" || result.success === true) {
+        setIsSuccess(true);
+        setServerMessage(result.msg || "We let you know after verifying your payment slip. Your ticket will be sent to your email shortly.");
+        toast({
+          title: "Success!",
+          description: result.msg || "Your ticket purchase request has been sent for verification.",
+        });
+      } else {
+        // Fallback for unexpected response structure but successful HTTP
+        if (response.ok) {
+            setIsSuccess(true);
+            setServerMessage("Your request has been received.");
+        } else {
+            throw new Error("Unexpected response from server.");
+        }
+      }
     } catch (error: any) {
       console.error(error);
       toast({
@@ -108,7 +125,7 @@ export default function BuyTicketPage() {
           <div className="space-y-2">
             <h2 className="text-3xl font-headline font-black text-foreground">Request Received!</h2>
             <p className="text-muted-foreground leading-relaxed">
-              We let you know after verifying your payment slip. Your ticket will be sent to your email shortly.
+              {serverMessage}
             </p>
           </div>
           <Button asChild className="w-full bg-primary hover:bg-primary/90 rounded-xl h-12 font-headline text-lg text-white">
