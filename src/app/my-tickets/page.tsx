@@ -10,8 +10,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
-import { Ticket, Loader2, ArrowLeft, Send } from "lucide-react";
+import { Ticket, Loader2, ArrowLeft, Send, Upload } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 const formSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -20,6 +21,8 @@ const formSchema = z.object({
 export default function MyTicketsPage() {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isWatching, setIsWatching] = useState(false);
+  const [preview, setPreview] = useState<string | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -31,22 +34,87 @@ export default function MyTicketsPage() {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsSubmitting(true);
     try {
-      // Logic for retrieving tickets via email
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      toast({
-        title: "Request Sent",
-        description: "If an account exists with this email, your tickets have been sent.",
+      const response = await fetch("https://central.elight.lk/webhook-test/ijse-algo-ridma/my-tickets", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
       });
-      form.reset();
+
+      const result = await response.json();
+
+      if (result.success === "false" || result.success === false) {
+        toast({
+          variant: "destructive",
+          title: "Request Failed",
+          description: result.msg || "We couldn't find any tickets associated with this email.",
+        });
+      } else {
+        toast({
+          title: "Request Sent",
+          description: result.msg || "If an account exists with this email, your tickets have been sent.",
+        });
+        form.reset();
+      }
     } catch (error: any) {
       toast({
         variant: "destructive",
         title: "Error",
-        description: "Something went wrong. Please try again later.",
+        description: error.message || "Something went wrong. Please try again later.",
       });
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setIsWatching(true);
+      try {
+        const reader = new FileReader();
+        const base64Promise = new Promise<string>((resolve, reject) => {
+          reader.onloadend = () => resolve(reader.result as string);
+          reader.onerror = reject;
+        });
+        reader.readAsDataURL(file);
+        
+        const base64Image = await base64Promise;
+        setPreview(base64Image);
+
+        // Call the watch API immediately
+        const response = await fetch("https://central.elight.lk/webhook-test/ijse-algo-ridma/ticket/watch", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ image: base64Image }),
+        });
+
+        const result = await response.json();
+        
+        if (result.success === "true" || result.success === true) {
+          toast({
+            title: "Ticket Verified",
+            description: result.msg || "Your ticket image has been successfully processed.",
+          });
+        } else {
+          toast({
+            variant: "destructive",
+            title: "Verification Failed",
+            description: result.msg || "We couldn't verify this ticket image.",
+          });
+        }
+      } catch (error: any) {
+        toast({
+          variant: "destructive",
+          title: "Process Error",
+          description: "An error occurred while uploading the image.",
+        });
+      } finally {
+        setIsWatching(false);
+      }
     }
   };
 
@@ -65,10 +133,10 @@ export default function MyTicketsPage() {
           </div>
           <CardTitle className="font-headline text-3xl font-black text-foreground">Find My Tickets</CardTitle>
           <CardDescription className="text-base">
-            Enter your email address to retrieve your purchased tickets.
+            Enter your email or upload your ticket image for verification.
           </CardDescription>
         </CardHeader>
-        <CardContent className="p-8">
+        <CardContent className="p-8 space-y-8">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <FormField
@@ -108,6 +176,48 @@ export default function MyTicketsPage() {
               </Button>
             </form>
           </Form>
+
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-background px-2 text-muted-foreground">Or upload image</span>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-2xl cursor-pointer bg-secondary/5 hover:bg-secondary/10 border-primary/20 transition-colors relative">
+              <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                {isWatching ? (
+                  <Loader2 className="w-8 h-8 text-primary animate-spin" />
+                ) : (
+                  <>
+                    <Upload className="w-8 h-8 text-primary/60 mb-2" />
+                    <p className="text-sm text-foreground font-bold">Verify via Image</p>
+                  </>
+                )}
+              </div>
+              <Input 
+                type="file" 
+                className="hidden" 
+                accept="image/*"
+                onChange={handleFileChange}
+                disabled={isWatching}
+              />
+            </label>
+
+            {preview && (
+              <div className="relative aspect-video rounded-xl overflow-hidden border shadow-inner">
+                <Image
+                  src={preview}
+                  alt="Ticket Preview"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+            )}
+          </div>
         </CardContent>
       </Card>
     </div>
