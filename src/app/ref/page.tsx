@@ -98,7 +98,7 @@ export default function RefTicketPage() {
     if (!submittedData) return;
     setIsDeleting(true);
     try {
-      const response = await fetch(`https://central.elight.lk/webhook/ijse-algo-ridma/buy/ref/delete/${submittedData.id}`, {
+      const response = await fetch(`https://central.elight.lk/webhook/0f5f1bdf-5bd2-4825-8423-867ac11ec8de/ijse-algo-ridma/buy/ref/delete/${submittedData.id}`, {
         method: "GET",
       });
 
