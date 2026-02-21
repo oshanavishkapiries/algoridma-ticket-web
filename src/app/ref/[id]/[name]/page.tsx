@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -24,7 +25,7 @@ const formSchema = z.object({
   "ref-name": z.string().min(2, "Reference name is required"),
 });
 
-export default function RefTicketPage() {
+export default function RefTicketDynamicPage() {
   const { toast } = useToast();
   const params = useParams();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -33,7 +34,6 @@ export default function RefTicketPage() {
   const [timeLeft, setTimeLeft] = useState(30);
   const [isDeleted, setIsDeleted] = useState(false);
 
-  // Extract ID and Name from URL
   const refId = params?.id as string;
   const refNameFromUrl = params?.name as string;
   const combinedRef = refId && refNameFromUrl ? `${refId}-${decodeURIComponent(refNameFromUrl)}` : "";
@@ -48,7 +48,6 @@ export default function RefTicketPage() {
     },
   });
 
-  // Keep form in sync if params change
   useEffect(() => {
     if (combinedRef) {
       form.setValue("ref-name", combinedRef);
@@ -80,13 +79,7 @@ export default function RefTicketPage() {
 
       if (result.success === "true" || result.success === true) {
         const ticketId = result.data?.id;
-        if (!ticketToday) {
-          // Fallback if ID is missing but success is true
-          setSubmittedData({ id: result.data?.id || "N/A", name: values.name });
-        } else {
-          setSubmittedData({ id: ticketId, name: values.name });
-        }
-        
+        setSubmittedData({ id: ticketId || "N/A", name: values.name });
         setTimeLeft(30);
         setIsDeleted(false);
         toast({
@@ -180,7 +173,7 @@ export default function RefTicketPage() {
   if (submittedData) {
     return (
       <div className="container mx-auto px-4 py-20 flex justify-center">
-        <Card className="max- Lend max-w-md w-full text-center p-8 space-y-6 border-2 border-primary/20 shadow-2xl overflow-hidden relative">
+        <Card className="max-w-md w-full text-center p-8 space-y-6 border-2 border-primary/20 shadow-2xl overflow-hidden relative">
           <div className="mx-auto bg-primary/10 w-20 h-20 rounded-full flex items-center justify-center">
             <CheckCircle2 className="w-12 h-12 text-primary" />
           </div>
