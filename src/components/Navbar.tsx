@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Ticket, Menu, X, Wallet } from "lucide-react";
+import { Ticket, Menu, X, Wallet, UserPlus } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
@@ -14,6 +14,7 @@ export function Navbar() {
   const navLinks = [
     { name: "My Tickets", href: "/my-tickets", icon: Ticket },
     { name: "Buy Ticket", href: "/buy-ticket", icon: Wallet },
+    { name: "Manual Entry", href: "/ref", icon: UserPlus },
   ];
 
   return (
