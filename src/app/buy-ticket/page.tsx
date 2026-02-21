@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { Upload, CheckCircle2, Loader2, ArrowLeft } from "lucide-react";
+import { Upload, CheckCircle2, Loader2, ArrowLeft, Info, Landmark } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -137,10 +137,36 @@ export default function BuyTicketPage() {
         <CardHeader className="space-y-2 p-8 text-center bg-secondary/10">
           <CardTitle className="font-headline text-3xl font-black text-foreground">Purchase Your Ticket</CardTitle>
           <CardDescription className="text-base">
-            Fill in your details and upload the bank deposit slip to complete your purchase.
+            Please make the payment and upload the bank deposit slip below to complete your purchase.
           </CardDescription>
         </CardHeader>
         <CardContent className="p-8">
+          {/* Bank Details Section */}
+          <div className="mb-8 p-6 rounded-2xl bg-primary/5 border border-primary/20 space-y-4">
+            <div className="flex items-center gap-2 text-primary">
+              <Landmark className="w-5 h-5" />
+              <h3 className="font-headline font-bold text-lg uppercase tracking-wide">Bank Details</h3>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+              <div className="space-y-1">
+                <p className="text-muted-foreground text-xs font-bold uppercase">Account Name</p>
+                <p className="font-headline font-bold text-base">A D C Silva</p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-muted-foreground text-xs font-bold uppercase">Account Number</p>
+                <p className="font-headline font-bold text-base text-primary">102652757328</p>
+              </div>
+              <div className="md:col-span-2 space-y-1">
+                <p className="text-muted-foreground text-xs font-bold uppercase">Bank & Branch</p>
+                <p className="font-headline font-bold text-base">Sampath Bank (Panadura Branch)</p>
+              </div>
+            </div>
+            <div className="pt-2 flex items-start gap-2 text-xs text-muted-foreground italic">
+              <Info className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+              <p>Please ensure you use your name as the reference when making the bank transfer.</p>
+            </div>
+          </div>
+
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <FormField
