@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, ArrowLeft, UserPlus, Trash2, CheckCircle2, RotateCcw } from "lucide-react";
+import { Loader2, ArrowLeft, UserPlus, Trash2, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 import { Progress } from "@/components/ui/progress";
 
@@ -65,22 +65,23 @@ export default function RefTicketPage() {
 
       const result = await response.json();
 
-      if (result.success === "false" || result.success === false) {
-        toast({
-          variant: "destructive",
-          title: "Submission Failed",
-          description: result.msg || "An error occurred during processing.",
-        });
-      } else {
-        // Assuming the API returns an ID for the ticket in result.data.id or similar
-        // If not, we'll use a placeholder or the email as ID if the delete endpoint supports it
-        const ticketId = result.data?.id || values.email; 
+      if (result.success === "true" || result.success === true) {
+        const ticketId = result.data?.id;
+        if (!ticketId) {
+          throw new Error("API did not return a ticket ID");
+        }
         setSubmittedData({ id: ticketId, name: values.name });
         setTimeLeft(30);
         setIsDeleted(false);
         toast({
           title: "Ticket Processed",
           description: "Manual ticket entry successful.",
+        });
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Submission Failed",
+          description: result.msg || "An error occurred during processing.",
         });
       }
     } catch (error: any) {
@@ -167,6 +168,9 @@ export default function RefTicketPage() {
             <p className="text-muted-foreground">
               Manual entry for <span className="text-white font-bold">{submittedData.name}</span> completed.
             </p>
+            <p className="text-[10px] text-zinc-500 font-mono bg-zinc-800/50 py-1 px-2 rounded inline-block">
+              TICKET ID: {submittedData.id}
+            </p>
           </div>
 
           {timeLeft > 0 && (
@@ -183,7 +187,7 @@ export default function RefTicketPage() {
                 className="w-full h-12 font-headline gap-2"
               >
                 {isDeleting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
-                Delete Entry
+                Delete Ticket #{submittedData.id.slice(-6)}
               </Button>
             </div>
           )}
