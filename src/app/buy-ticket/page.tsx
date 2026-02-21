@@ -57,7 +57,7 @@ export default function BuyTicketPage() {
         const reader = new FileReader();
         reader.onloadend = () => resolve(reader.result as string);
         reader.onerror = reject;
-        reader.readAs丢DataURL(file);
+        reader.readAsDataURL(file);
       });
 
       const payload = {
@@ -197,7 +197,7 @@ export default function BuyTicketPage() {
           </div>
 
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space- lock space-y-8">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <FormField
                 control={form.control}
                 name="name"
