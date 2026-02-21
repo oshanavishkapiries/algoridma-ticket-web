@@ -126,7 +126,7 @@ export default function BuyTicketPage() {
               {serverMessage}
             </p>
           </div>
-          <Button asChild className="w-full bg-primary hover:bg-primary/90  h-12 font-headline text-lg text-white">
+          <Button asChild className="w-full bg-primary hover:bg-primary/90 h-12 font-headline text-lg text-white">
             <Link href="/">Back to Home</Link>
           </Button>
         </Card>
@@ -219,7 +219,7 @@ export default function BuyTicketPage() {
                   <FormItem>
                     <FormLabel className="text-lg font-bold">Email Address</FormLabel>
                     <FormControl>
-                      <Input placeholder="name@university.edu" className="h-12 " {...field} />
+                      <Input placeholder="name@university.edu" className="h-12" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -234,11 +234,12 @@ export default function BuyTicketPage() {
                     <FormLabel className="text-lg font-bold">Batch</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
-                        <SelectTrigger className="h-12 ">
+                        <SelectTrigger className="h-12">
                           <SelectValue placeholder="Select your batch" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
+                        <SelectItem value="69">Batch 69</SelectItem>
                         <SelectItem value="71">Batch 71</SelectItem>
                         <SelectItem value="73">Batch 73</SelectItem>
                         <SelectItem value="75">Batch 75</SelectItem>
@@ -261,7 +262,7 @@ export default function BuyTicketPage() {
                     <FormControl>
                       <div className="space-y-4">
                         <div className="flex items-center justify-center w-full">
-                          <label className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed  cursor-pointer bg-secondary/5 hover:bg-secondary/10 border-primary/20 transition-colors">
+                          <label className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed cursor-pointer bg-secondary/5 hover:bg-secondary/10 border-primary/20 transition-colors">
                             <div className="flex flex-col items-center justify-center pt-5 pb-6">
                               <Upload className="w-10 h-10 text-primary/60 mb-3" />
                               <p className="mb-2 text-sm text-foreground font-bold">Click to upload slip</p>
@@ -280,7 +281,7 @@ export default function BuyTicketPage() {
                           </label>
                         </div>
                         {preview && (
-                          <div className="relative aspect-video  overflow-hidden border">
+                          <div className="relative aspect-video overflow-hidden border">
                             <Image
                               src={preview}
                               alt="Bank Slip Preview"

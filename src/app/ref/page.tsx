@@ -269,6 +269,7 @@ export default function RefTicketPage() {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
+                          <SelectItem value="69">Batch 69</SelectItem>
                           <SelectItem value="71">Batch 71</SelectItem>
                           <SelectItem value="73">Batch 73</SelectItem>
                           <SelectItem value="75">Batch 75</SelectItem>
