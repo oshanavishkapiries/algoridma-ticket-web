@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Ticket } from "lucide-react";
+import { Ticket, Search } from "lucide-react";
 
 export default function Home() {
   return (
@@ -24,14 +24,22 @@ export default function Home() {
             FEBRUARY 28 • IJSE CAR PARK
           </div>
 
-          {/* CTA Button with longer Slide Up Animation delay */}
-          <div className="animate-in fade-in slide-in-from-bottom-8 duration-700 delay-500 fill-mode-both">
+          {/* CTA Section with longer Slide Up Animation delay */}
+          <div className="flex flex-col items-center gap-6 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-500 fill-mode-both">
             <Button asChild variant="outline" className="border-primary/50 text-primary hover:bg-primary/10 px-10 h-14 text-xl font-headline transition-all group">
               <Link href="/buy-ticket" className="flex items-center gap-3">
                 <Ticket className="w-6 h-6 transition-transform group-hover:rotate-12" />
                 <span>Buy Ticket • 1000 LKR</span>
               </Link>
             </Button>
+
+            <Link 
+              href="/my-tickets" 
+              className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-2 text-sm font-medium group"
+            >
+              <Search className="w-4 h-4 transition-transform group-hover:scale-110" />
+              <span>Already have a ticket? Find it here</span>
+            </Link>
           </div>
         </div>
       </div>
