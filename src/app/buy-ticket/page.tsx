@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -11,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { Upload, CheckCircle2, Loader2, ArrowLeft, Info, Landmark } from "lucide-react";
+import { Upload, CheckCircle2, Loader2, ArrowLeft, Info, Landmark, Copy, Check } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -30,6 +29,7 @@ export default function BuyTicketPage() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [preview, setPreview] = useState<string | null>(null);
   const [serverMessage, setServerMessage] = useState("");
+  const [copiedField, setCopiedField] = useState<string | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -39,6 +39,15 @@ export default function BuyTicketPage() {
       batch: "",
     },
   });
+
+  const copyToClipboard = (text: string, field: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedField(field);
+    toast({
+      description: `${field} copied to clipboard`,
+    });
+    setTimeout(() => setCopiedField(null), 2000);
+  };
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsSubmitting(true);
@@ -150,11 +159,31 @@ export default function BuyTicketPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
               <div className="space-y-1">
                 <p className="text-muted-foreground text-xs font-bold uppercase">Account Name</p>
-                <p className="font-headline font-bold text-base">A D C Silva</p>
+                <div className="flex items-center gap-2">
+                  <p className="font-headline font-bold text-base">A D C Silva</p>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="h-8 w-8 text-muted-foreground hover:text-primary"
+                    onClick={() => copyToClipboard("A D C Silva", "Account Name")}
+                  >
+                    {copiedField === "Account Name" ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                  </Button>
+                </div>
               </div>
               <div className="space-y-1">
                 <p className="text-muted-foreground text-xs font-bold uppercase">Account Number</p>
-                <p className="font-headline font-bold text-base text-primary">102652757328</p>
+                <div className="flex items-center gap-2">
+                  <p className="font-headline font-bold text-base text-primary">102652757328</p>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="h-8 w-8 text-muted-foreground hover:text-primary"
+                    onClick={() => copyToClipboard("102652757328", "Account Number")}
+                  >
+                    {copiedField === "Account Number" ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                  </Button>
+                </div>
               </div>
               <div className="md:col-span-2 space-y-1">
                 <p className="text-muted-foreground text-xs font-bold uppercase">Bank & Branch</p>
