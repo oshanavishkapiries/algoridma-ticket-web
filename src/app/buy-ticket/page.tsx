@@ -151,7 +151,7 @@ export default function BuyTicketPage() {
         </CardHeader>
         <CardContent className="p-8">
           {/* Bank Details Section */}
-          <div className="mb-8 p-6 rounded-2xl bg-primary/5 border border-primary/20 space-y-4">
+          <div className="mb-8 p-6 bg-primary/5 border border-primary/20 space-y-4">
             <div className="flex items-center gap-2 text-primary">
               <Landmark className="w-5 h-5" />
               <h3 className="font-headline font-bold text-lg uppercase tracking-wide">Bank Details</h3>

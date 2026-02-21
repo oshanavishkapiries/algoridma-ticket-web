@@ -33,13 +33,13 @@ export default function Home() {
               </Link>
             </Button>
 
-            <Link 
-              href="/my-tickets" 
-              className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-2 text-sm font-medium group"
-            >
-              <Search className="w-4 h-4 transition-transform group-hover:scale-110" />
-              <span>Already have a ticket? Find it here</span>
-            </Link>
+            <Button asChild variant="outline" className="border-primary/50 text-primary hover:bg-primary/10 px-10 h-14 text-xl font-headline transition-all group">
+              <Link href="/my-tickets" className="flex items-center gap-3">
+                <Search className="w-4 h-4 transition-transform group-hover:scale-110" />
+                <span>Already have a ticket?</span>
+              </Link>
+            </Button>
+
           </div>
         </div>
       </div>
