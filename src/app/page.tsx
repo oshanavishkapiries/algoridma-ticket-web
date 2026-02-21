@@ -29,7 +29,7 @@ export default function Home() {
             <Button asChild variant="outline" className="border-primary/50 text-primary hover:bg-primary/10 px-10 h-14 text-xl font-headline transition-all group">
               <Link href="/buy-ticket" className="flex items-center gap-3">
                 <Ticket className="w-6 h-6 transition-transform group-hover:rotate-12" />
-                <span>Buy Ticket</span>
+                <span>Buy Ticket • 1000 LKR</span>
               </Link>
             </Button>
           </div>
