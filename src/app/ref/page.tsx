@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -99,7 +98,7 @@ export default function RefTicketPage() {
     if (!submittedData) return;
     setIsDeleting(true);
     try {
-      const response = await fetch(`https://central.elight.lk/webhook/ijse-algo-ridma/buy/ref/${submittedData.id}`, {
+      const response = await fetch(`https://central.elight.lk/webhook/ijse-algo-ridma/buy/ref/delete/${submittedData.id}`, {
         method: "GET",
       });
 

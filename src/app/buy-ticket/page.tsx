@@ -57,7 +57,7 @@ export default function BuyTicketPage() {
         const reader = new FileReader();
         reader.onloadend = () => resolve(reader.result as string);
         reader.onerror = reject;
-        reader.readAsDataURL(file);
+        reader.readAs丢DataURL(file);
       });
 
       const payload = {
@@ -85,7 +85,7 @@ export default function BuyTicketPage() {
         });
       } else {
         setIsSuccess(true);
-        setServerMessage(result.msg || "We let you know after verifying your payment slip. Your ticket will be sent to your email shortly.");
+        setServerMessage(result.msg || "Your payment slip has been submitted. We will send your ticket to your email once verified. Please make sure to check your spam folder as well.");
         toast({
           title: "Success!",
           description: result.msg || "Your ticket purchase request has been sent for verification.",
@@ -197,7 +197,7 @@ export default function BuyTicketPage() {
           </div>
 
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space- lock space-y-8">
               <FormField
                 control={form.control}
                 name="name"
