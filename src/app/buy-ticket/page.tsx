@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { Upload, CheckCircle2, Loader2, ArrowLeft, Info, Landmark, Copy, Check, AlertTriangle } from "lucide-react";
+import { Upload, CheckCircle2, Loader2, ArrowLeft, Info, Landmark, Copy, Check, AlertTriangle, Phone } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -26,6 +26,7 @@ import {
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Invalid email address"),
+  mobile_number: z.string().min(10, "Mobile number must be at least 10 digits"),
   batch: z.string({
     required_error: "Please select a batch",
   }),
@@ -51,6 +52,7 @@ export default function BuyTicketPage() {
     defaultValues: {
       name: "",
       email: "",
+      mobile_number: "",
       batch: "",
     },
   });
@@ -78,6 +80,7 @@ export default function BuyTicketPage() {
       const payload = {
         name: values.name,
         email: values.email,
+        mobile_number: values.mobile_number,
         batch: values.batch,
         bankSlip: base64Image,
       };
@@ -271,19 +274,35 @@ export default function BuyTicketPage() {
                 )}
               />
 
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-lg font-bold">Email Address</FormLabel>
-                    <FormControl>
-                      <Input placeholder="name@university.edu" className="h-12" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-lg font-bold">Email Address</FormLabel>
+                      <FormControl>
+                        <Input placeholder="name@university.edu" className="h-12" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="mobile_number"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-lg font-bold">Mobile Number</FormLabel>
+                      <FormControl>
+                        <Input placeholder="07XXXXXXXX" className="h-12" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
 
               <FormField
                 control={form.control}
