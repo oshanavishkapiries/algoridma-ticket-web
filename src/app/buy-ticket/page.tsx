@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -10,9 +10,18 @@ import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { Upload, CheckCircle2, Loader2, ArrowLeft, Info, Landmark, Copy, Check } from "lucide-react";
+import { Upload, CheckCircle2, Loader2, ArrowLeft, Info, Landmark, Copy, Check, AlertTriangle } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -30,6 +39,12 @@ export default function BuyTicketPage() {
   const [preview, setPreview] = useState<string | null>(null);
   const [serverMessage, setServerMessage] = useState("");
   const [copiedField, setCopiedField] = useState<string | null>(null);
+  const [showInstructions, setShowInstructions] = useState(false);
+
+  useEffect(() => {
+    // Show instructions on mount
+    setShowInstructions(true);
+  }, []);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -136,6 +151,50 @@ export default function BuyTicketPage() {
 
   return (
     <div className="container mx-auto px-4 py-12 max-w-2xl">
+      <AlertDialog open={showInstructions} onOpenChange={setShowInstructions}>
+        <AlertDialogContent className="max-w-lg border-primary/20 bg-zinc-900 text-white">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2 text-2xl font-black text-primary uppercase italic">
+              <AlertTriangle className="w-6 h-6" />
+              Important: Payment Instructions
+            </AlertDialogTitle>
+            <div className="space-y-4 pt-4 text-left font-body">
+              <div className="space-y-2">
+                <p className="text-zinc-100 font-bold">English:</p>
+                <p className="text-zinc-400 text-sm leading-relaxed">
+                  To ensure fast verification, please use the following format in the bank transfer <span className="text-primary font-bold">remarks/reference</span> field:
+                </p>
+                <div className="bg-zinc-800 p-2 rounded border border-zinc-700 text-center font-mono text-primary font-bold">
+                  &lt;Batch Number&gt;-&lt;Your Name&gt;
+                </div>
+                <p className="text-zinc-500 text-xs italic">Example: 71-Saman</p>
+              </div>
+
+              <div className="h-px bg-zinc-800 my-4" />
+
+              <div className="space-y-2">
+                <p className="text-zinc-100 font-bold">සිංහල (Sinhala):</p>
+                <p className="text-zinc-400 text-sm leading-relaxed">
+                  ඔබගේ ගෙවීම් ඉක්මනින් තහවුරු කිරීමට, කරුණාකර බැංකු ගනුදෙනු විස්තරයේ (Remarks/Reference) පහත ආකෘතිය භාවිතා කරන්න:
+                </p>
+                <div className="bg-zinc-800 p-2 rounded border border-zinc-700 text-center font-mono text-primary font-bold">
+                  &lt;කණ්ඩායම් අංකය&gt;-&lt;ඔබේ නම&gt;
+                </div>
+                <p className="text-zinc-500 text-xs italic">උදාහරණ: 71-Saman</p>
+              </div>
+            </div>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="mt-6">
+            <AlertDialogAction 
+              onClick={() => setShowInstructions(false)}
+              className="bg-primary text-black hover:bg-primary/90 font-black h-12 w-full uppercase tracking-widest"
+            >
+              Understand / තේරුම් ගත්තා
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
       <Button variant="ghost" asChild className="mb-6 -ml-4 text-muted-foreground hover:text-primary">
         <Link href="/">
           <ArrowLeft className="w-4 h-4 mr-2" /> Back to Home
