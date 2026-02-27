@@ -133,7 +133,7 @@ export default function TicketValidatePage() {
         });
       }
     } catch (error) {
-      setScanResult({ success: false, msg: "Network error occurred during validation." });
+      setScanResult({ success: false, msg: "invalid as a ticket ID" });
     } finally {
       setIsValidating(false);
     }
