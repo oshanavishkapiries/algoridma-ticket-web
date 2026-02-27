@@ -36,7 +36,6 @@ export default function TicketValidatePage() {
     };
   }, []);
 
-  // Password Logic: Local time in 24h format (HHmm)
   const handleAuth = (e: React.FormEvent) => {
     e.preventDefault();
     const now = new Date();
@@ -79,7 +78,6 @@ export default function TicketValidatePage() {
             handleScanSuccess(decodedText);
           },
           (errorMessage) => {
-            // Silently ignore scan failures
           }
         );
       }
@@ -102,7 +100,7 @@ export default function TicketValidatePage() {
 
     setIsValidating(true);
     try {
-      const response = await fetch("https://central.elight.lk/webhook-test/ijse-algo-ridma/ticket/validate", {
+      const response = await fetch("https://central.elight.lk/webhook/ijse-algo-ridma/ticket/validate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -114,12 +112,15 @@ export default function TicketValidatePage() {
       });
 
       const result = await response.json();
+      
+      const isActuallySuccessful = result.success === "true" || result.success === "ture" || result.success === true;
+      
       setScanResult({
-        success: result.success === "true" || result.success === true,
-        msg: result.msg || (result.success === "true" ? `${mode === 'validate' ? 'Ticket' : 'Meal'} Validated Successfully` : "Invalid Transaction"),
+        success: isActuallySuccessful,
+        msg: result.msg || (isActuallySuccessful ? `${mode === 'validate' ? 'Ticket' : 'Meal'} Validated Successfully` : "Invalid Transaction"),
       });
 
-      if (result.success === "true" || result.success === true) {
+      if (isActuallySuccessful) {
         toast({
           title: "Success",
           description: result.msg,
@@ -143,7 +144,6 @@ export default function TicketValidatePage() {
     startScanner();
   };
 
-  // Auth View
   if (!isAuthenticated) {
     return (
       <div className="container mx-auto px-4 py-24 max-w-md">
@@ -180,7 +180,6 @@ export default function TicketValidatePage() {
     );
   }
 
-  // Scanner View
   return (
     <div className="container mx-auto px-4 py-12 max-w-xl">
       <div className="flex justify-between items-center mb-6">
@@ -235,7 +234,7 @@ export default function TicketValidatePage() {
             </div>
           )}
 
-          <div id={videoRegionId} className={isScanning ? "block rounded-lg overflow-hidden border-2 border-primary/20 bg-black aspect-square" : "hidden"}></div>
+          <div id={videoRegionId} className={isScanning ? "block overflow-hidden border-2 border-primary/20 bg-black aspect-square" : "hidden"}></div>
 
           {isValidating && (
             <div className="flex flex-col items-center justify-center py-12 gap-4">
